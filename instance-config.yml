@@ -1,11 +1,12 @@
 # Instance-specific configuration for the baserock.org StoryBoard system.
 - hosts: storyboard
   vars_files:
-    - vars.yml
+  - vars.yml
   sudo: yes
   roles:
-#    - { role: geerlingguy.apache }
-#    - { role: Mayeu.RabbitMQ }
+  - { role: geerlingguy.apache }
+  - { role: Mayeu.RabbitMQ }
+  - { role: geerlingguy.mysql, when: mysql_host == 'localhost' }
 
   tasks:
 

@@ -10,10 +10,6 @@ refresh_token_ttl: 604800
 valid_oauth_clients:
 - "{{ ansible_hostname }}"
 
-storyboard_db_user: storyboard
-storyboard_db_pass: storyboard
-
-
 
 mysql_host: localhost
 mysql_port: 3306
@@ -45,8 +41,22 @@ apache_vhosts:
 # For rabbitmq role
 rabbitmq_ssl: false
 rabbitmq_vhost_definitions:
-  - name:    vhost1
+  - name:    "{{ rabbitmq_vhost }}"
 rabbitmq_users_definitions:
   - vhost:    "{{ rabbitmq_vhost }}"
     user:     "{{ rabbitmq_user }}"
     password: "{{ rabbitmq_user_password }}"
+
+# For mysql/mariadb role
+mysql_root_password: super-secure-password
+mysql_databases:
+  - name: "{{ mysql_database }}"
+mysql_users:
+  - name: "{{ mysql_user }}"
+    host: "{{ mysql_host }}"
+    password: "{{ mysql_user_password }}"
+    priv: "{{ mysql_database }}.*:ALL"
+mysql_packages:
+  - mariadb-client
+  - mariadb-server
+  - python-mysqldb
