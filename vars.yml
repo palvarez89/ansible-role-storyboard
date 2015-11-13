@@ -1,6 +1,7 @@
 # General vars for storyboard
 www_root: /srv/storyboard/www
-working_root: '/var/lib/storyboard/spool'
+working_root: /var/lib/storyboard/spool
+install_root: /var/lib/storyboard
 enable_notifications: 'True'
 openid_url: https://openid.baserock.org
 authorization_code_ttl: 300

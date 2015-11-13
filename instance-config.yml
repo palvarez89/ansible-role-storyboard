@@ -52,6 +52,31 @@
     args:
       chdir: "{{ src_root_api }}"
 
+  - name: Create more folders needed for storyboard and apache2
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: www-data
+      group: www-data
+    with_items:
+    - "{{ install_root }}"
+    - "{{ working_root }}"
+    - /var/log/storyboard
+
+  - name: Install wsgi of StoryBoard
+    command: install -g www-data -o www-data {{ src_root_api }}/storyboard/api/app.wsgi {{ install_root }}/storyboard.wsgi
+
+  - name: DEPS NEEDED?
+    pip:
+      name: "{{ item }}"
+    with_items:
+    - oslo.serialization
+    - debtcollector
+    - webob
+    - singledispatch
+
+  - name: Migrate the database
+    command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf upgrade head
 #  - name: Install puppet and git
 #    apt:
 #      name: "{{ item }}"
