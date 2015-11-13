@@ -62,6 +62,7 @@
     with_items:
     - "{{ install_root }}"
     - "{{ working_root }}"
+    - "{{ www_root }}"
     - /var/log/storyboard
 
   - name: Install wsgi of StoryBoard
@@ -78,6 +79,40 @@
 
   - name: Migrate the database
     command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf upgrade head
+
+  - name: Create more folders needed for storyboard-webclient
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: www-data
+      group: www-data
+    with_items:
+    - "{{ src_root_webclient }}"
+
+  - name: Download StoryBoard webclient
+    get_url:
+      url: "{{ webclient_url }}"
+      dest: "{{ src_root_webclient }}/{{ webclient_filename }}"
+      force: yes
+    register: new_webclient
+
+  - name: Unpack storyboard-webclient
+    unarchive:
+      src: "{{ src_root_webclient }}/{{ webclient_filename }}"
+      dest: "{{ src_root_webclient }}"
+      copy: no
+      owner: www-data
+      group: www-data
+    when: new_webclient|changed
+
+  - name: Create config.json
+    shell: echo "{}" > {{ src_root_webclient }}/dist/config.json
+    args:
+      creates: "{{ src_root_webclient }}/dist/config.json"
+
+  - name: Copy storyboard-webclient into the configured www_root
+    shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
+
 #  - name: Install puppet and git
 #    apt:
 #      name: "{{ item }}"
