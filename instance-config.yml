@@ -44,11 +44,13 @@
       dest: "{{ src_root_api }}"
       update: yes
 
-  - shell: pip install {{ src_root_api }}
   - name: Setup virtual environment for the app using requirements.txt
     pip:
       requirements: "{{ src_root_api }}/requirements.txt"
-    when: something is defined
+
+  - shell: python {{ src_root_api }}/setup.py install
+    args:
+      chdir: "{{ src_root_api }}"
 
 #  - name: Install puppet and git
 #    apt:
