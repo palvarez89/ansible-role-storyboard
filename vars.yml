@@ -1,0 +1,44 @@
+# General vars for storyboard
+www_root: /srv/storyboard/www
+working_root: '/var/lib/storyboard/spool'
+enable_notifications: 'True'
+openid_url: https://openid.baserock.org
+authorization_code_ttl: 300
+access_token_ttl: 3600
+refresh_token_ttl: 604800
+valid_oauth_clients:
+- "{{ ansible_hostname }}"
+
+storyboard_db_user: storyboard
+storyboard_db_pass: storyboard
+
+
+
+mysql_host: localhost
+mysql_port: 3306
+mysql_database: storyboard
+mysql_user: storyboard
+mysql_user_password: storyboard
+
+rabbitmq_host: localhost
+rabbitmq_port: 5672
+rabbitmq_vhost: '/'
+rabbitmq_user: storyboard
+rabbitmq_user_password: storyboard
+
+enable_token_cleanup: 'True'
+enable_cron: 'True'
+
+# for apache role
+apache_listen_port: 80
+apache_vhosts:
+      - {servername: "172.16.20.50.xip.io", documentroot: "{{ www_root }} "}
+#      - {servername: "storyboard.baserock.org", documentroot: "/srv/storyboard/www"}
+# For rabbitmq role
+rabbitmq_ssl: false
+rabbitmq_vhost_definitions:
+  - name:    vhost1
+rabbitmq_users_definitions:
+  - vhost:    "{{ rabbitmq_vhost }}"
+    user:     "{{ rabbitmq_user }}"
+    password: "{{ rabbitmq_user_password }}"
