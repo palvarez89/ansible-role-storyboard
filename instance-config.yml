@@ -17,7 +17,9 @@
     with_items:
     - libapache2-mod-wsgi
     - curl
-    - git      
+    - git
+    - python-pip
+    - python-dev
 
   - name: Install apache modules needed
     apache2_module:
@@ -36,6 +38,17 @@
     template:
       src: templates/storyboard.conf
       dest: /etc/storyboard/storyboard.conf
+
+  - git:
+      repo: https://github.com/openstack-infra/storyboard
+      dest: "{{ src_root_api }}"
+      update: yes
+
+  - shell: pip install {{ src_root_api }}
+  - name: Setup virtual environment for the app using requirements.txt
+    pip:
+      requirements: "{{ src_root_api }}/requirements.txt"
+    when: something is defined
 
 #  - name: Install puppet and git
 #    apt:

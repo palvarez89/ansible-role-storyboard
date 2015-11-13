@@ -29,6 +29,13 @@ rabbitmq_user_password: storyboard
 enable_token_cleanup: 'True'
 enable_cron: 'True'
 
+
+webclient_filename: 'storyboard-webclient-latest.tar.gz'
+webclient_url: http://tarballs.openstack.org/storyboard-webclient/{{ webclient_filename }}
+
+src_root_api: /opt/storyboard
+src_root_webclient: /opt/storyboard-webclient
+
 # for apache role
 apache_listen_port: 80
 apache_vhosts:
