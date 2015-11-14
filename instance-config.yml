@@ -113,6 +113,17 @@
   - name: Copy storyboard-webclient into the configured www_root
     shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
 
+
+  - name: install Virtualhost for storyboard
+    template:
+      src: templates/vhost-storyboard.conf
+      dest: /etc/apache2/sites-available/vhost-storyboard.conf
+
+  - name: enable storyboard Virtualhost
+    file:
+      src: ../sites-available/vhost-storyboard.conf
+      dest: /etc/apache2/sites-enabled/vhost-storyboard.conf
+
 #  - name: Install puppet and git
 #    apt:
 #      name: "{{ item }}"
