@@ -3,12 +3,13 @@ www_root: /srv/storyboard/www
 working_root: /var/lib/storyboard/spool
 install_root: /var/lib/storyboard
 enable_notifications: 'True'
-openid_url: https://openid.baserock.org
+openid_url: https://openid.baserock.org/openid/
 authorization_code_ttl: 300
 access_token_ttl: 3600
 refresh_token_ttl: 604800
 valid_oauth_clients:
 - "{{ ansible_hostname }}"
+- 192.168.77.60.xip.io
 
 
 mysql_host: localhost
