@@ -7,9 +7,10 @@ openid_url: https://openid.baserock.org/openid/
 authorization_code_ttl: 300
 access_token_ttl: 3600
 refresh_token_ttl: 604800
+fqdn: 192.168.77.60.xip.io
 valid_oauth_clients:
 - "{{ ansible_hostname }}"
-- 192.168.77.60.xip.io
+- "{{ fqdn }}"
 
 
 mysql_host: localhost
@@ -36,9 +37,6 @@ src_root_webclient: /opt/storyboard-webclient
 
 # for apache role
 apache_listen_port: 80
-apache_vhosts:
-      - {servername: "172.16.20.50.xip.io", documentroot: "{{ www_root }} "}
-#      - {servername: "storyboard.baserock.org", documentroot: "/srv/storyboard/www"}
 # For rabbitmq role
 rabbitmq_ssl: false
 rabbitmq_vhost_definitions:
