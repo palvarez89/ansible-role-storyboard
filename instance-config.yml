@@ -123,3 +123,4 @@
     file:
       src: ../sites-available/vhost-storyboard.conf
       dest: /etc/apache2/sites-enabled/vhost-storyboard.conf
+      state: link
