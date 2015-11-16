@@ -26,10 +26,10 @@
 
     SSLEngine on
 
-    SSLCertificateFile      {{ ssl_cert }}
-    SSLCertificateKeyFile   {{ ssl_key }}
+    SSLCertificateFile      /etc/ssl/certs/{{ ssl_cert }}
+    SSLCertificateKeyFile   /etc/ssl/private/{{ ssl_key }}
 {% if resolved_ssl_ca is defined %}
-    SSLCertificateChainFile {{ resolved_ssl_ca }}
+    SSLCertificateChainFile /etc/ssl/certs/{{ resolved_ssl_ca }}
 {% endif %}
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">

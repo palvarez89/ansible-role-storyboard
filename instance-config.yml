@@ -114,6 +114,21 @@
   - name: Copy storyboard-webclient into the configured www_root
     shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
 
+  - copy:
+      src: "{{ ssl_cert }}"
+      dest: "/etc/ssl/certs/{{ ssl_cert }}"
+    when: ssl_cert is defined
+
+  - copy:
+      src: "{{ ssl_key }}"
+      dest: "/etc/ssl/private/{{ ssl_key }}"
+    when: ssl_key is defined
+
+  - copy:
+      src: "{{ resolved_ssl_ca }}"
+      dest: "/etc/ssl/certs/{{ resolved_ssl_ca }}"
+    when: resolved_ssl_ca is defined
+
   - set_fact:
       vhost_protocol: http
     when: ssl_cert is not defined or ssl_key is not defined
