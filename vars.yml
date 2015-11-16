@@ -37,6 +37,7 @@ src_root_webclient: /opt/storyboard-webclient
 
 # for apache role
 apache_listen_port: 80
+apache_remove_default_vhost: true
 # For rabbitmq role
 rabbitmq_ssl: false
 rabbitmq_vhost_definitions:
