@@ -9,7 +9,6 @@
   - { role: geerlingguy.mysql, when: mysql_host == 'localhost' }
 
   tasks:
-
   - name: Install packages needed from apt
     apt:
       pkg: "{{ item }}"
@@ -113,10 +112,17 @@
   - name: Copy storyboard-webclient into the configured www_root
     shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
 
+  - set_fact:
+      vhost_protocol: http
+    when: ssl_cert is not defined or ssl_key is not defined
+
+  - set_fact:
+      vhost_protocol: https
+    when: ssl_cert is defined and ssl_key is defined
 
   - name: install Virtualhost for storyboard
     template:
-      src: templates/vhost-storyboard.conf
+      src: templates/storyboard_{{ vhost_protocol }}.vhost.j2
       dest: /etc/apache2/sites-available/vhost-storyboard.conf
 
   - name: enable storyboard Virtualhost

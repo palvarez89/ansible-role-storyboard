@@ -1,0 +1,26 @@
+<VirtualHost {{ fqdn }}:80>
+{% if server_admin is defined %}
+    ServerAdmin {{ server_admin }}
+{% endif %}
+    ServerName {{ fqdn }}
+
+    DocumentRoot {{ www_root }}
+
+  WSGIDaemonProcess storyboard user=www-data group=www-data threads=5 python-path=/usr/local/lib/python2.7/dist-packages
+  WSGIScriptAlias /api /var/lib/storyboard/storyboard.wsgi
+  WSGIPassAuthorization On
+
+  LogLevel warn
+  ErrorLog ${APACHE_LOG_DIR}/storyboard-error.log
+  CustomLog ${APACHE_LOG_DIR}/storyboard-access.log combined
+
+  <Directory "{{ install_root }}">
+
+{% if apache_vhosts_version == "2.4" %}
+      Require all granted
+{% else %}
+      Order allow,deny
+      Allow from all
+{% endif %}
+  </Directory>
+</VirtualHost>
