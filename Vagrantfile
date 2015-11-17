@@ -18,6 +18,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.sudo = true
       ansible.verbose = 'vvvv'
 
+      ansible.extra_vars = {
+        fqdn: '192.168.77.60.xip.io'
+      }
+
       ansible.groups = {
         "storyboard" => ["storyboard"],
       }
