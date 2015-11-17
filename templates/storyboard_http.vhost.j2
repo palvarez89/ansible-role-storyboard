@@ -1,4 +1,4 @@
-<VirtualHost {{ fqdn }}:80>
+<VirtualHost *:80>
 {% if server_admin is defined %}
     ServerAdmin {{ server_admin }}
 {% endif %}
