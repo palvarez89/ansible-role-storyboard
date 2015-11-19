@@ -20,6 +20,7 @@
     - git
     - python-pip
     - python-dev
+    - libmysqlclient-dev
 
   - name: Install apache modules needed
     apache2_module:
@@ -80,6 +81,10 @@
   - name: Migrate the database
     command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf upgrade head
 
+  - name: Install tox
+    pip:
+      name: tox
+
   - name: Create more folders needed for storyboard-webclient
     file:
       path: "{{ item }}"
@@ -89,22 +94,21 @@
     with_items:
     - "{{ src_root_webclient }}"
 
-  - name: Download StoryBoard webclient
-    get_url:
-      url: "{{ webclient_url }}"
-      dest: "{{ src_root_webclient }}/{{ webclient_filename }}"
-      force: yes
-    register: new_webclient
-
-  - name: Unpack storyboard-webclient
-    unarchive:
-      src: "{{ src_root_webclient }}/{{ webclient_filename }}"
+  - git:
+      repo: https://github.com/openstack-infra/storyboard-webclient
       dest: "{{ src_root_webclient }}"
-      copy: no
-      owner: www-data
-      group: www-data
-    when: new_webclient|changed
-    notify: restart apache
+      update: yes
+      force: yes
+
+  - lineinfile:
+      dest: "{{ src_root_webclient }}/src/theme/storyboard/theme.less"
+      regexp: "^@brand-primary:"
+      line: "@brand-primary: #006566"
+      backrefs: yes
+
+  - command: tox -egrunt build
+    args:
+      chdir: "{{ src_root_webclient}}"
 
   - name: Create config.json
     shell: echo "{}" > {{ src_root_webclient }}/dist/config.json
