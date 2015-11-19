@@ -99,21 +99,25 @@
       dest: "{{ src_root_webclient }}"
       update: yes
       force: yes
+    sudo_user: www-data
 
   - lineinfile:
       dest: "{{ src_root_webclient }}/src/theme/storyboard/theme.less"
       regexp: "^@brand-primary:"
-      line: "@brand-primary: #006566"
+      line: "@brand-primary: #006566;"
       backrefs: yes
+    sudo_user: www-data
 
   - command: tox -egrunt build
     args:
       chdir: "{{ src_root_webclient}}"
+    sudo_user: www-data
 
   - name: Create config.json
     shell: echo "{}" > {{ src_root_webclient }}/dist/config.json
     args:
       creates: "{{ src_root_webclient }}/dist/config.json"
+    sudo_user: www-data
 
   - name: Copy storyboard-webclient into the configured www_root
     shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
