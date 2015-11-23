@@ -16,5 +16,6 @@ galaxy_info:
   - storyboard
   - openstack
 dependencies:
+- { role: geerlingguy.apache }
 - { role: Mayeu.RabbitMQ, when: rabbitmq_host == 'localhost' }
 - { role: geerlingguy.mysql, when: mysql_host == 'localhost' }
