@@ -1,2 +1,149 @@
 ---
 # tasks file for ansible-role-storyboard
+- name: Install packages needed from apt
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update-cache: yes
+  with_items:
+  - libapache2-mod-wsgi
+  - curl
+  - git
+  - python-pip
+  - python-dev
+  - libmysqlclient-dev
+
+- name: Install apache modules needed
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - wsgi
+
+- name: create /etc/storyboard
+  file:
+    path: /etc/storyboard
+    state: directory
+
+- name: install storyboard.conf
+  template:
+    src: templates/storyboard.conf.j2
+    dest: /etc/storyboard/storyboard.conf
+
+- git:
+    repo: https://github.com/openstack-infra/storyboard
+    dest: "{{ src_root_api }}"
+    update: yes
+  notify: restart apache
+
+- name: Setup virtual environment for the app using requirements.txt
+  pip:
+    requirements: "{{ src_root_api }}/requirements.txt"
+
+- shell: python {{ src_root_api }}/setup.py install
+  args:
+    chdir: "{{ src_root_api }}"
+
+- name: Create more folders needed for storyboard and apache2
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+  with_items:
+  - "{{ install_root }}"
+  - "{{ working_root }}"
+  - "{{ www_root }}"
+  - /var/log/storyboard
+
+- name: Install wsgi of StoryBoard
+  command: install -g www-data -o www-data {{ src_root_api }}/storyboard/api/app.wsgi {{ install_root }}/storyboard.wsgi
+  notify: restart apache
+
+- name: DEPS NEEDED?
+  pip:
+    name: "{{ item }}"
+  with_items:
+  - oslo.serialization
+  - debtcollector
+  - webob
+  - singledispatch
+
+- name: Migrate the database
+  command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf upgrade head
+
+- name: Install tox
+  pip:
+    name: tox
+
+- name: Create more folders needed for storyboard-webclient
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+  with_items:
+  - "{{ src_root_webclient }}"
+
+- git:
+    repo: https://github.com/openstack-infra/storyboard-webclient
+    dest: "{{ src_root_webclient }}"
+    update: yes
+    force: yes
+  sudo_user: www-data
+
+- lineinfile:
+    dest: "{{ src_root_webclient }}/src/theme/storyboard/theme.less"
+    regexp: "^@brand-primary:"
+    line: "@brand-primary: #006566;"
+    backrefs: yes
+  sudo_user: www-data
+
+- command: tox -egrunt build
+  args:
+    chdir: "{{ src_root_webclient}}"
+  sudo_user: www-data
+
+- name: Create config.json
+  shell: echo "{}" > {{ src_root_webclient }}/dist/config.json
+  args:
+    creates: "{{ src_root_webclient }}/dist/config.json"
+  sudo_user: www-data
+
+- name: Copy storyboard-webclient into the configured www_root
+  shell: cp -r "{{ src_root_webclient }}"/dist/* "{{ www_root }}"
+
+- copy:
+    src: "{{ ssl_cert }}"
+    dest: "/etc/ssl/certs/{{ ssl_cert }}"
+  when: ssl_cert is defined
+
+- copy:
+    src: "{{ ssl_key }}"
+    dest: "/etc/ssl/private/{{ ssl_key }}"
+  when: ssl_key is defined
+
+- copy:
+    src: "{{ resolved_ssl_ca }}"
+    dest: "/etc/ssl/certs/{{ resolved_ssl_ca }}"
+  when: resolved_ssl_ca is defined
+
+- set_fact:
+    vhost_protocol: http
+  when: ssl_cert is not defined or ssl_key is not defined
+
+- set_fact:
+    vhost_protocol: https
+  when: ssl_cert is defined and ssl_key is defined
+
+- name: install Virtualhost for storyboard
+  template:
+    src: templates/storyboard_{{ vhost_protocol }}.vhost.j2
+    dest: /etc/apache2/sites-available/vhost-storyboard.conf
+  notify: restart apache
+
+- name: enable storyboard Virtualhost
+  file:
+    src: ../sites-available/vhost-storyboard.conf
+    dest: /etc/apache2/sites-enabled/vhost-storyboard.conf
+    state: link
