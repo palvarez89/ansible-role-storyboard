@@ -27,7 +27,7 @@
 
 - name: install storyboard.conf
   template:
-    src: templates/storyboard.conf.j2
+    src: storyboard.conf.j2
     dest: /etc/storyboard/storyboard.conf
 
 - git:
@@ -138,7 +138,7 @@
 
 - name: install Virtualhost for storyboard
   template:
-    src: templates/storyboard_{{ vhost_protocol }}.vhost.j2
+    src: storyboard_{{ vhost_protocol }}.vhost.j2
     dest: /etc/apache2/sites-available/vhost-storyboard.conf
   notify: restart apache
 
