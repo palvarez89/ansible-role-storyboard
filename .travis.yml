@@ -4,6 +4,9 @@ python: "2.7"
 sudo: required
 dist: trusty
 
+services:
+  - mysql
+
 env:
   - SITE=test.yml
 
@@ -21,6 +24,10 @@ install:
   - ansible-galaxy install geerlingguy.apache,1.4.2 -p `pwd`/..
   - ansible-galaxy install Mayeu.RabbitMQ,1.4.0 -p `pwd`/..
   - ansible-galaxy install geerlingguy.mysql,1.5.0 -p `pwd`/..
+
+before_script:
+  - mysql -e 'create database storyboard;'
+  - mysql -e "GRANT ALL PRIVILEGES ON storyboard.* TO storyboard@localhost IDENTIFIED BY 'storyboard'"
 
 script:
   # Check the role/playbook's syntax.
