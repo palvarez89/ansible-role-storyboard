@@ -25,8 +25,8 @@ install:
   - ansible-galaxy install geerlingguy.mysql,1.5.0 -p `pwd`/..
 
 before_script:
-  - mysql -e 'create database storyboard;'
-  - mysql -e "GRANT ALL PRIVILEGES ON storyboard.* TO storyboard@localhost IDENTIFIED BY 'storyboard'"
+  - mysql -u root -e 'create database storyboard;'
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON storyboard.* TO storyboard@localhost IDENTIFIED BY 'storyboard'"
 
 script:
   # Check the role/playbook's syntax.
