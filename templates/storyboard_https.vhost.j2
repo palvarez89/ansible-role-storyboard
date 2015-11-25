@@ -26,10 +26,10 @@
 
     SSLEngine on
 
-    SSLCertificateFile      /etc/ssl/certs/{{ storyboard_ssl_cert }}
-    SSLCertificateKeyFile   /etc/ssl/private/{{ storyboard_ssl_key }}
+    SSLCertificateFile      /etc/ssl/certs/{{ storyboard_ssl_cert | basename }}
+    SSLCertificateKeyFile   /etc/ssl/private/{{ storyboard_ssl_key | basename }}
 {% if storyboard_resolved_ssl_ca is defined %}
-    SSLCertificateChainFile /etc/ssl/certs/{{ storyboard_resolved_ssl_ca }}
+    SSLCertificateChainFile /etc/ssl/certs/{{ storyboard_resolved_ssl_ca | basename}}
 {% endif %}
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
