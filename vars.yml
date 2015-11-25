@@ -1,40 +1,9 @@
-# General vars for storyboard
-install_root: /var/lib/storyboard
-www_root: "{{ install_root }}/www"
-working_root: "{{ install_root }}/spool"
-enable_notifications: 'True'
-openid_url: https://openid.baserock.org/openid/
-authorization_code_ttl: 300
-access_token_ttl: 3600
-refresh_token_ttl: 604800
-fqdn: 192.168.77.60.xip.io
-valid_oauth_clients:
-- "{{ ansible_hostname }}"
-- "{{ fqdn }}"
-
-
-mysql_host: localhost
-mysql_port: 3306
-mysql_database: storyboard
-mysql_user: storyboard
-mysql_user_password: storyboard
-
+# For rabbitmq role
 rabbitmq_host: localhost
 rabbitmq_port: 5672
 rabbitmq_vhost: '/'
 rabbitmq_user: storyboard
 rabbitmq_user_password: storyboard
-
-enable_token_cleanup: 'True'
-enable_cron: 'True'
-
-src_root_api: /opt/storyboard
-src_root_webclient: /opt/storyboard-webclient
-
-# for apache role
-apache_listen_port: 80
-apache_remove_default_vhost: true
-# For rabbitmq role
 rabbitmq_ssl: false
 rabbitmq_vhost_definitions:
   - name:    "{{ rabbitmq_vhost }}"
@@ -43,7 +12,13 @@ rabbitmq_users_definitions:
     user:     "{{ rabbitmq_user }}"
     password: "{{ rabbitmq_user_password }}"
 rabbitmq_conf_tcp_listeners_address: '127.0.0.1'
+
 # For mysql/mariadb role
+mysql_host: localhost
+mysql_port: 3306
+mysql_database: storyboard
+mysql_user: storyboard
+mysql_user_password: storyboard
 mysql_root_password: super-secure-password
 mysql_databases:
   - name: "{{ mysql_database }}"
