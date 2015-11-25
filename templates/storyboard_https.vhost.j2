@@ -1,12 +1,12 @@
 <VirtualHost *:80>
-{% if server_admin is defined %}
-    ServerAdmin {{ server_admin }}
+{% if storyboard_server_admin is defined %}
+    ServerAdmin {{ storyboard_server_admin }}
 {% endif %}
-    ServerName {{ fqdn }}
+    ServerName {{ storyboard_fqdn }}
 
-    DocumentRoot {{ www_root }}
+    DocumentRoot {{ storyboard_www_root }}
 
-    Redirect / https://{{ fqdn }}/
+    Redirect / https://{{ storyboard_fqdn }}/
 
     LogLevel warn
     ErrorLog ${APACHE_LOG_DIR}/storyboard-error.log
@@ -15,10 +15,10 @@
 </VirtualHost>
 <IfModule mod_ssl.c>
   <VirtualHost *:443>
-{% if server_admin is defined %}
-    ServerAdmin {{ server_admin }}
+{% if storyboard_server_admin is defined %}
+    ServerAdmin {{ storyboard_server_admin }}
 {% endif %}
-    ServerName {{ fqdn }}
+    ServerName {{ storyboard_fqdn }}
 
     LogLevel warn
     ErrorLog ${APACHE_LOG_DIR}/storyboard-ssl-error.log
@@ -26,10 +26,10 @@
 
     SSLEngine on
 
-    SSLCertificateFile      /etc/ssl/certs/{{ ssl_cert }}
-    SSLCertificateKeyFile   /etc/ssl/private/{{ ssl_key }}
-{% if resolved_ssl_ca is defined %}
-    SSLCertificateChainFile /etc/ssl/certs/{{ resolved_ssl_ca }}
+    SSLCertificateFile      /etc/ssl/certs/{{ storyboard_ssl_cert }}
+    SSLCertificateKeyFile   /etc/ssl/private/{{ storyboard_ssl_key }}
+{% if storyboard_resolved_ssl_ca is defined %}
+    SSLCertificateChainFile /etc/ssl/certs/{{ storyboard_resolved_ssl_ca }}
 {% endif %}
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
@@ -45,13 +45,13 @@
     # MSIE 7 and newer should be able to use keepalive
     BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
-    DocumentRoot {{ www_root }}
+    DocumentRoot {{ storyboard_www_root }}
 
     WSGIDaemonProcess storyboard user=www-data group=www-data threads=5 python-path=/usr/local/lib/python2.7/dist-packages
     WSGIScriptAlias /api /var/lib/storyboard/storyboard.wsgi
     WSGIPassAuthorization On
 
-    <Directory "{{ install_root }}">
+    <Directory "{{ storyboard_install_root }}">
 {% if apache_vhosts_version == "2.4" %}
         Require all granted
 {% else %}

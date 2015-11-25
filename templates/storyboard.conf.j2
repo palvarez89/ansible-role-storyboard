@@ -10,7 +10,7 @@ lock_path = $state_path/lock
 
 # Storyboard's working directory. Please ensure that the storyboard user has
 # read/write access to this directory.
-working_directory = {{ working_root }}
+working_directory = {{ storyboard_working_root }}
 
 # log_format = %(asctime)s %(levelname)8s [%(name)s] %(message)s
 # log_date_format = %Y-%m-%d %H:%M:%S
@@ -43,31 +43,31 @@ working_directory = {{ working_root }}
 
 # Enable notifications. This feature drives deferred processing, reporting,
 # and subscriptions.
-enable_notifications = {{ enable_notifications }}
+enable_notifications = {{ storyboard_enable_notifications }}
 
 [oauth]
 # StoryBoard's oauth configuration.
 
 # OpenId Authentication endpoint
-openid_url = {{ openid_url }}
+openid_url = {{ storyboard_openid_url }}
 
 # Time in seconds before an authorization code expires.
-authorization_code_ttl = {{ authorization_code_ttl }}
+authorization_code_ttl = {{ storyboard_authorization_code_ttl }}
 
 # Time in seconds before an access_token expires
-access_token_ttl = {{ access_token_ttl }}
+access_token_ttl = {{ storyboard_access_token_ttl }}
 
 # Time in seconds before an refresh_token expires
-refresh_token_ttl = {{ refresh_token_ttl }}
+refresh_token_ttl = {{ storyboard_refresh_token_ttl }}
 
 # A list of valid client id's that may connect to StoryBoard.
-valid_oauth_clients = {{ valid_oauth_clients|join(',') }}
+valid_oauth_clients = {{ storyboard_valid_oauth_clients|join(',') }}
 
 [cron]
 # Storyboard's cron management configuration
 
 # Enable or disable cron (Default disabled)
-# enable = {{ enable_cron }}
+# enable = {{ storyboard_enable_cron }}
 
 # Don't know what to do with this yet
 #<% if scope.lookupvar("storyboard::application::cors_allowed_origins_string") != :undef %>
@@ -88,7 +88,7 @@ valid_oauth_clients = {{ valid_oauth_clients|join(',') }}
 # connection = mysql://root:pass@127.0.0.1:3306/storyboard
 # Replace 127.0.0.1 above with the IP address of the database used by the
 # main storyboard server. (Leave it as is if the database runs on this host.)
-connection=mysql+pymysql://{{ mysql_user }}:{{ mysql_user_password }}@{{ mysql_host }}:{{ mysql_port }}/{{ mysql_database }}
+connection=mysql+pymysql://{{ storyboard_mysql_user }}:{{ storyboard_mysql_user_password }}@{{ storyboard_mysql_host }}:{{ storyboard_mysql_port }}/{{ storyboard_mysql_database }}
 
 # The SQLAlchemy connection string used to connect to the slave database
 # slave_connection =
@@ -125,24 +125,24 @@ connection=mysql+pymysql://{{ mysql_user }}:{{ mysql_user_password }}@{{ mysql_h
 [notifications]
 
 # Host of the rabbitmq server.
-rabbit_host={{ rabbitmq_host }}
+rabbit_host={{ storyboard_rabbitmq_host }}
 
 # The RabbitMQ login method
 rabbit_login_method = AMQPLAIN
 
 # The RabbitMQ userid.
-rabbit_userid = {{ rabbitmq_user }}
+rabbit_userid = {{ storyboard_rabbitmq_user }}
 
 # The RabbitMQ password.
-rabbit_password = {{ rabbitmq_user_password }}
+rabbit_password = {{ storyboard_rabbitmq_user_password }}
 
 # The RabbitMQ broker port where a single node is used.
-rabbit_port = {{ rabbitmq_port }}
+rabbit_port = {{ storyboard_rabbitmq_port }}
 
 # The virtual host within which our queues and exchanges live.
-rabbit_virtual_host = {{ rabbitmq_vhost }}
+rabbit_virtual_host = {{ storyboard_rabbitmq_vhost }}
 
 [plugin_token_cleaner]
 # Enable/Disable the token cleaning cron plugin. This requires cron
 # management to be enabled.
-# enable = {{ enable_token_cleanup }}
+# enable = {{ storyboard_enable_token_cleanup }}
