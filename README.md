@@ -1,7 +1,7 @@
 StoryBoard Ansible Role
 =======================
 
-[![Build Status](https://travis-ci.org/palvarez89/ansible-role-storyboard.svg?branch=master)](https://travis-ci.org/palvarez89/ansible-role-storyboard)
+[![Build Status](https://travis-ci.org/palvarez89/ansible-role-storyboard.svg?branch=master)](https://travis-ci.org/palvarez89/ansible-role-storyboard) [![Ansible Galaxy](https://img.shields.io/badge/role-palvarez89.storyboard-blue.svg)](https://galaxy.ansible.com/detail#/role/6187)
 
 Installs and configures StoryBoard.
 
