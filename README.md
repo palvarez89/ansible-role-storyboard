@@ -71,6 +71,11 @@ Email of the Server Admin for Apache configuration.
 
 SSL certificate files to configure StoryBoard with `https`.
 
+    storyboard_worker_count: 5
+    storyboard_use_upstart: false
+
+Number of workers and boolean to use Upstart or SysV.
+
     apache_vhosts_version: -
 
 Apache vhosts version, read from `geerlingguy.apache` role.

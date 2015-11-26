@@ -1,0 +1,11 @@
+description "StoryBoard Deferred Workers"
+
+start on started network-services
+stop on stopping network-services
+
+setuid www-data
+setgid www-data
+
+script
+  storyboard-worker-daemon --worker-count {{ storyboard_worker_count }}
+end script
