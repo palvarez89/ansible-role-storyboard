@@ -4,7 +4,7 @@ storyboard_install_root: /var/lib/storyboard
 storyboard_www_root: "{{ storyboard_install_root }}/www"
 storyboard_working_root: "{{ storyboard_install_root }}/spool"
 storyboard_enable_notifications: 'True'
-storyboard_openid_url: https://openid.baserock.org/openid/
+storyboard_openid_url: https://login.launchpad.net/+openid
 storyboard_authorization_code_ttl: 300
 storyboard_access_token_ttl: 3600
 storyboard_refresh_token_ttl: 604800

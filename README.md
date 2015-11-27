@@ -35,7 +35,7 @@ Locations where StoryBoard is going to be installed.
 FQDN used for StoryBoard VirtualHost configuration for Apache.
 
     storyboard_enable_notifications: 'True'
-    storyboard_openid_url: https://openid.baserock.org/openid/
+    storyboard_openid_url: https://login.launchpad.net/+openid
     storyboard_authorization_code_ttl: 300
     storyboard_access_token_ttl: 3600
     storyboard_refresh_token_ttl: 604800
