@@ -27,7 +27,7 @@ storyboard_rabbitmq_user: storyboard
 storyboard_rabbitmq_user_password: storyboard
 
 storyboard_enable_token_cleanup: 'True'
-storyboard_enable_cron: 'True'
+storyboard_enable_cron: 'False'
 
 storyboard_worker_count: 5
 storyboard_use_upstart: false

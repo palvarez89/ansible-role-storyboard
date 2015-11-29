@@ -67,7 +67,7 @@ valid_oauth_clients = {{ storyboard_valid_oauth_clients|join(',') }}
 # Storyboard's cron management configuration
 
 # Enable or disable cron (Default disabled)
-# enable = {{ storyboard_enable_cron }}
+enable = {{ storyboard_enable_cron }}
 
 # Don't know what to do with this yet
 #<% if scope.lookupvar("storyboard::application::cors_allowed_origins_string") != :undef %>
