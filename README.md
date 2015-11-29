@@ -76,6 +76,11 @@ SSL certificate files to configure StoryBoard with `https`.
 
 Number of workers and boolean to use Upstart or SysV.
 
+    storyboard_cors_allowed_origins_string: ''
+    storyboard_cors_max_age: 3600
+
+CORS configuration.
+
     apache_vhosts_version: -
 
 Apache vhosts version, read from `geerlingguy.apache` role.

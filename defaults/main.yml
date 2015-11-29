@@ -13,6 +13,15 @@ storyboard_valid_oauth_clients:
 - "{{ ansible_hostname }}"
 - "{{ storyboard_fqdn }}"
 
+#storyboard_cors_allowed_origins: ''
+storyboard_cors_max_age: 3600
+
+#storyboard_server_admin: ''
+
+#storyboard_ssl_cert: ''
+#storyboard_ssl_key: ''
+#storyboard_resolved_ssl_ca: ''
+
 
 storyboard_mysql_host: localhost
 storyboard_mysql_port: 3306

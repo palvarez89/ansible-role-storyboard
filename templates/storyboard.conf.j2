@@ -69,18 +69,17 @@ valid_oauth_clients = {{ storyboard_valid_oauth_clients|join(',') }}
 # Enable or disable cron (Default disabled)
 enable = {{ storyboard_enable_cron }}
 
-# Don't know what to do with this yet
-#<% if scope.lookupvar("storyboard::application::cors_allowed_origins_string") != :undef %>
-#[cors]
-## W3C CORS configuration. For more information, see http://www.w3.org/TR/cors/
-#
-## List of permitted CORS domains.
-#allowed_origins = <%= @cors_allowed_origins_string %>
-#
-## CORS browser options cache max age (in seconds)
-#max_age=<%= @cors_max_age %>
-#
-#<% end %>
+{% if storyboard_cors_allowed_origins_string is defined %}
+[cors]
+# W3C CORS configuration. For more information, see http://www.w3.org/TR/cors/
+
+# List of permitted CORS domains.
+allowed_origins = {{ storyboard_cors_allowed_origins_string }}
+
+# CORS browser options cache max age (in seconds)
+max_age={{ storyboard_cors_max_age }}
+
+{% endif %}
 
 [database]
 # This line MUST be changed to actually run storyboard
