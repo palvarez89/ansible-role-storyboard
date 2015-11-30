@@ -56,6 +56,7 @@ FQDN used for StoryBoard VirtualHost configuration for Apache.
     storyboard_rabbitmq_user_password: storyboard
 
     storyboard_enable_token_cleanup: 'True'
+    storyboard_enable_scheduler: 'True'
     storyboard_enable_cron: 'False'
 
 Some configuration parameters used in `/etc/storyboard/storyboard.conf`. See
