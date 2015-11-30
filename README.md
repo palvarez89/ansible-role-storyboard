@@ -82,6 +82,10 @@ Number of workers and boolean to use Upstart or SysV.
 
 CORS configuration.
 
+    storyboard_brand_primary: '006566'
+
+Base colour for StoryBoard theme.
+
     apache_vhosts_version: -
 
 Apache vhosts version, read from `geerlingguy.apache` role.

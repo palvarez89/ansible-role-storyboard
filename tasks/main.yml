@@ -95,7 +95,7 @@
 - lineinfile:
     dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.less"
     regexp: "^@brand-primary:"
-    line: "@brand-primary: #006566;"
+    line: "@brand-primary: #{{ storyboard_brand_primary }};"
     backrefs: yes
   sudo_user: www-data
 

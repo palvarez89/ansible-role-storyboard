@@ -45,6 +45,8 @@ storyboard_use_upstart: false
 storyboard_src_root_api: /opt/storyboard
 storyboard_src_root_webclient: /opt/storyboard-webclient
 
+storyboard_brand_primary: '006566'
+
 # for apache role
 apache_listen_port: 80
 apache_remove_default_vhost: true
