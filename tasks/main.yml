@@ -156,11 +156,23 @@
     mode: 0644
   when: storyboard_use_upstart
 
+- name: Remove SysV configuration when using Upstart
+  file:
+    path: /etc/init.d/storyboard-workers
+    state: absent
+  when: storyboard_use_upstart
+
 - name: Set up SysVinit configuration for StoryBoard workers
   template:
     src: storyboard-workers.sh.j2
     dest: /etc/init.d/storyboard-workers
     mode: 0755
+  when: not storyboard_use_upstart
+
+- name: Remove Upstart configuration when using SysV
+  file:
+    path: /etc/init/storyboard-workers.conf
+    state: absent
   when: not storyboard_use_upstart
 
 - name: Start storyboard-workers service
