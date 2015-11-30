@@ -40,7 +40,7 @@ storyboard_enable_scheduler: 'True'
 storyboard_enable_cron: 'False'
 
 storyboard_worker_count: 5
-storyboard_use_upstart: false
+storyboard_use_upstart: true
 
 storyboard_src_root_api: /opt/storyboard
 storyboard_src_root_webclient: /opt/storyboard-webclient
