@@ -31,9 +31,10 @@
     dest: /etc/storyboard/storyboard.conf
 
 - git:
-    repo: https://github.com/openstack-infra/storyboard
+    repo: https://git.openstack.org/openstack-infra/storyboard
     dest: "{{ storyboard_src_root_api }}"
     update: yes
+    force: yes
   notify: restart apache
 
 - name: Setup virtual environment for the app using requirements.txt
@@ -86,7 +87,7 @@
   - "{{ storyboard_src_root_webclient }}"
 
 - git:
-    repo: https://github.com/openstack-infra/storyboard-webclient
+    repo: https://git.openstack.org/openstack-infra/storyboard-webclient
     dest: "{{ storyboard_src_root_webclient }}"
     update: yes
     force: yes
