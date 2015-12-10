@@ -1,3 +1,5 @@
+storyboard_projects: projects.yml
+storyboard_superusers: users.yml
 # For rabbitmq role
 rabbitmq_host: localhost
 rabbitmq_port: 5672
