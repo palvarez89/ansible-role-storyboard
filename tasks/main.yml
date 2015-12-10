@@ -180,3 +180,25 @@
   service:
     name: storyboard-workers
     state: started
+
+- name: Copy projects file to /tmp
+  copy:
+    src: "{{ storyboard_projects }}"
+    dest: /tmp/projects.yaml
+  when: storyboard_projects is defined
+
+- name: Set up projects
+  command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_projects /tmp/projects.yaml
+  sudo_user: www-data
+  when: storyboard_projects is defined
+
+- name: Copy superusers file to /tmp
+  copy:
+    src: "{{ storyboard_superusers }}"
+    dest: /tmp/superusers.yaml
+  when: storyboard_superusers is defined
+
+- name: Set up superusers
+  command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_superusers /tmp/superusers.yaml
+  sudo_user: www-data
+  when: storyboard_superusers is defined

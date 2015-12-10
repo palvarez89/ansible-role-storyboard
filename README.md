@@ -62,6 +62,11 @@ FQDN used for StoryBoard VirtualHost configuration for Apache.
 Some configuration parameters used in `/etc/storyboard/storyboard.conf`. See
 `templates/storyboard.conf.j2` for more information.
 
+    storyboard_projects: ''
+    storyboard_superusers: ''
+
+Files to pre-configure StoryBoard with projects and superusers.
+
     storyboard_server_admin: ''
 
 Email of the Server Admin for Apache configuration.
