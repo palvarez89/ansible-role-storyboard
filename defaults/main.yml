@@ -1,5 +1,12 @@
 ---
 # defaults file for ansible-role-storyboard
+
+storyboard_api_repo: https://git.openstack.org/openstack-infra/storyboard
+storyboard_api_version: master
+
+storyboard_webclient_repo: https://git.openstack.org/openstack-infra/storyboard-webclient
+storyboard_webclient_version: master
+
 storyboard_install_root: /var/lib/storyboard
 storyboard_www_root: "{{ storyboard_install_root }}/www"
 storyboard_working_root: "{{ storyboard_install_root }}/spool"

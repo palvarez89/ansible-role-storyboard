@@ -18,6 +18,14 @@ Role Variables
 Available variables are listed below, along with default values (see
 `defaults/main.yml`):
 
+    storyboard_api_repo: https://git.openstack.org/openstack-infra/storyboard
+    storyboard_api_version: master
+
+    storyboard_webclient_repo: https://git.openstack.org/openstack-infra/storyboard-webclient
+    storyboard_webclient_version: master
+
+Git repositories and versions to use for deploying StoryBoard.
+
     storyboard_src_root_api: /opt/storyboard
     storyboard_src_root_webclient: /opt/storyboard-webclient
 

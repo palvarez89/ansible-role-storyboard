@@ -45,7 +45,8 @@
     dest: /etc/storyboard/storyboard.conf
 
 - git:
-    repo: https://git.openstack.org/openstack-infra/storyboard
+    repo: "{{ storyboard_api_repo }}"
+    version: "{{ storyboard_api_version }}"
     dest: "{{ storyboard_src_root_api }}"
     update: yes
     force: yes
@@ -101,7 +102,8 @@
   - "{{ storyboard_src_root_webclient }}"
 
 - git:
-    repo: https://git.openstack.org/openstack-infra/storyboard-webclient
+    repo: "{{ storyboard_webclient_repo }}"
+    version: "{{ storyboard_webclient_version }}"
     dest: "{{ storyboard_src_root_webclient }}"
     update: yes
     force: yes
