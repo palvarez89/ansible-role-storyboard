@@ -82,6 +82,10 @@ SSL certificate files to configure StoryBoard with `https`.
 
 Number of workers and boolean to use Upstart or SysV.
 
+    storyboard_db_dump: ''
+
+Database dump to restore **before** the database is migrated to latest version
+
     storyboard_cors_allowed_origins_string: ''
     storyboard_cors_max_age: 3600
 

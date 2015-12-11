@@ -1,5 +1,19 @@
 ---
 # tasks file for ansible-role-storyboard
+
+- name: Copy db_dump file to /tmp
+  copy:
+    src: "{{ storyboard_db_dump }}"
+    dest: /tmp/dump.sql
+  when: storyboard_db_dump is defined
+
+- name: Load database dump
+  mysql_db:
+    state: import
+    name: storyboard
+    target: /tmp/dump.sql
+  when: storyboard_db_dump is defined
+
 - name: Install packages needed from apt
   apt:
     pkg: "{{ item }}"
