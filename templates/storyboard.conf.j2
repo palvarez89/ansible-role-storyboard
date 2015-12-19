@@ -165,7 +165,7 @@ sender = {{ storyboard_email_sender }}
 {% if storyboard_email_reply_to is defined %}
 # The email address of the Reply-To header (optional).
 reply_to = {{ storyboard_email_reply_to }}
-{% endif %}
+{% endif -%}
 
 # The SMTP server to use.
 smtp_host = {{ storyboard_email_smtp_host }}
@@ -173,35 +173,35 @@ smtp_host = {{ storyboard_email_smtp_host }}
 {% if storyboard_email_smtp_port is defined %}
 # The SMTP Server Port to connect to (default 25).
 smtp_port = {{ storyboard_email_smtp_port }}
-{% endif %}
+{% endif -%}
 
 # The SMTP socket timeout, in seconds
 smtp_timeout = {{ storyboard_email_smtp_timeout }}
 
-{% if storyboard_email_smtp_local_hostname is defined %}
+{%- if storyboard_email_smtp_local_hostname is defined %}
 # The FQDN of the sending host when identifying itself to the SMTP server
 # (optional).
 smtp_local_hostname = {{ storyboard_email_smtp_local_hostname }}
 {% endif %}
 
-{% if storyboard_email_smtp_ssl_keyfile is defined %}
+{%- if storyboard_email_smtp_ssl_keyfile is defined %}
 # Path to the SSL Keyfile, when using ESMTP. Please make sure the storyboard
 # client can read this file.
 smtp_ssl_keyfile = {{ storyboard_email_smtp_ssl_keyfile }}
 {% endif %}
 
-{% if storyboard_email_smtp_ssl_certfile is defined %}
+{%- if storyboard_email_smtp_ssl_certfile is defined %}
 # Path to the SSL Certificate, when using ESMTP. Please make sure the
 # storyboard client can read this file.
 smtp_ssl_certfile = {{ storyboard_email_smtp_ssl_certfile }}
 {% endif %}
 
-{% if storyboard_email_smtp_user is defined %}
+{%- if storyboard_email_smtp_user is defined %}
 # Username/login for the SMTP server.
 smtp_user = {{ storyboard_email_smtp_user }}
 {% endif %}
 
-{% if storyboard_email_smtp_password is defined %}
+{%- if storyboard_email_smtp_password is defined %}
 # Password for the SMTP server.
 smtp_password = {{ storyboard_email_smtp_password }}
 {% endif %}
