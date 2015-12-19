@@ -26,6 +26,8 @@
 
     SSLEngine on
     SSLProtocol all -SSLv3 -SSLv2
+    SSLHonorCipherOrder On
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
 
     SSLCertificateFile      /etc/ssl/certs/{{ storyboard_ssl_cert | basename }}
     SSLCertificateKeyFile   /etc/ssl/private/{{ storyboard_ssl_key | basename }}
