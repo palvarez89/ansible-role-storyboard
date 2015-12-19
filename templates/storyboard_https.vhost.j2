@@ -25,6 +25,7 @@
     CustomLog ${APACHE_LOG_DIR}/storyboard-ssl-access.log combined
 
     SSLEngine on
+    SSLProtocol all -SSLv3 -SSLv2
 
     SSLCertificateFile      /etc/ssl/certs/{{ storyboard_ssl_cert | basename }}
     SSLCertificateKeyFile   /etc/ssl/private/{{ storyboard_ssl_key | basename }}
