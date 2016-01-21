@@ -50,7 +50,9 @@
     dest: "{{ storyboard_src_root_api }}"
     update: yes
     force: yes
-  notify: restart apache
+  notify:
+  - restart apache
+  - restart storyboard-workers
 
 - name: Setup virtual environment for the app using requirements.txt
   pip:
@@ -157,7 +159,9 @@
   template:
     src: storyboard_{{ storyboard_vhost_protocol }}.vhost.j2
     dest: /etc/apache2/sites-available/vhost-storyboard.conf
-  notify: restart apache
+  notify:
+  - restart apache
+  - restart storyboard-workers
 
 - name: enable storyboard Virtualhost
   file:
@@ -172,6 +176,8 @@
     dest: /etc/init/storyboard-workers.conf
     mode: 0644
   when: storyboard_use_upstart
+  notify:
+  - restart storyboard-workers
 
 - name: Remove SysV configuration when using Upstart
   file:
@@ -185,6 +191,8 @@
     dest: /etc/init.d/storyboard-workers
     mode: 0755
   when: not storyboard_use_upstart
+  notify:
+  - restart storyboard-workers
 
 - name: Remove Upstart configuration when using SysV
   file:
