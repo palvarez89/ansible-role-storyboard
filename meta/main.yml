@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: your name
-  description: 
+  description: Ansible role to install OpenStack StoryBoard
   company: Codethink
   license: GPLv2
   min_ansible_version: 1.9
