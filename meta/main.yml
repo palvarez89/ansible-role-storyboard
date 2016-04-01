@@ -16,4 +16,4 @@ galaxy_info:
   - storyboard
   - openstack
 dependencies:
-- { role: geerlingguy.apache }
+- { role: geerlingguy.apache,1.4.2 }
