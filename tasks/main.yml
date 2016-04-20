@@ -118,6 +118,12 @@
     backrefs: yes
   sudo_user: www-data
 
+- replace:
+    dest: "{{ storyboard_src_root_webclient }}/bin/nodeenv.sh"
+    regexp: 'nodeenv'
+    replace: "nodeenv -j{{ ansible_processor_count }}"
+  sudo_user: www-data
+
 - command: tox -egrunt build
   args:
     chdir: "{{ storyboard_src_root_webclient}}"
