@@ -32,3 +32,8 @@ mysql_users:
 mysql_packages:
   - mysql-server-5.6
   - python-mysqldb
+storyboard_api_repo: https://github.com/palvarez89/storyboard
+storyboard_api_version: automation
+
+storyboard_webclient_repo: https://git.openstack.org/openstack-infra/storyboard-webclient
+storyboard_webclient_version: master

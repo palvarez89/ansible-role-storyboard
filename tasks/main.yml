@@ -1,4 +1,6 @@
 ---
+- include: rabbitmq.yml
+  when: storyboard_install_rabbitmq
 # tasks file for ansible-role-storyboard
 
 - name: Copy db_dump file to /tmp
