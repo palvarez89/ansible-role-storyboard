@@ -21,8 +21,6 @@ install:
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
   - ansible-galaxy install geerlingguy.apache,1.4.2 -p `pwd`/..
-  - ansible-galaxy install Mayeu.RabbitMQ,1.4.0 -p `pwd`/..
-  - ansible-galaxy install geerlingguy.mysql,1.5.0 -p `pwd`/..
 
 before_script:
   - mysql -u root -e 'create database storyboard;'

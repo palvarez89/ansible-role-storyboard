@@ -4,5 +4,4 @@
   - vars.yml
   sudo: yes
   roles:
-  - { role: geerlingguy.mysql, when: mysql_host == 'localhost' }
   - { role: palvarez89.storyboard }

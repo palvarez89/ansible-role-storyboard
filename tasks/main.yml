@@ -1,4 +1,7 @@
 ---
+- include: mysql.yml
+  when: storyboard_install_mysql
+
 - include: rabbitmq.yml
   when: storyboard_install_rabbitmq
 # tasks file for ansible-role-storyboard
