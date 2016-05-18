@@ -49,7 +49,8 @@
     src: storyboard.conf.j2
     dest: /etc/storyboard/storyboard.conf
 
-- git:
+- name: Clone API sources
+  git:
     repo: "{{ storyboard_api_repo }}"
     version: "{{ storyboard_api_version }}"
     dest: "{{ storyboard_src_root_api }}"
@@ -83,7 +84,7 @@
   command: install -g www-data -o www-data {{ storyboard_src_root_api }}/storyboard/api/app.wsgi {{ storyboard_install_root }}/storyboard.wsgi
   notify: restart apache
 
-- name: DEPS NEEDED?
+- name: Install some deps needed (TODO; investigate if they are really needed)
   pip:
     name: "{{ item }}"
   with_items:
@@ -108,7 +109,8 @@
   with_items:
   - "{{ storyboard_src_root_webclient }}"
 
-- git:
+- name: Clone Webclient sources
+  git:
     repo: "{{ storyboard_webclient_repo }}"
     version: "{{ storyboard_webclient_version }}"
     dest: "{{ storyboard_src_root_webclient }}"
@@ -116,20 +118,23 @@
     force: yes
   sudo_user: www-data
 
-- lineinfile:
+- name: Set @brand-primary colour
+  lineinfile:
     dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.less"
     regexp: "^@brand-primary:"
     line: "@brand-primary: #{{ storyboard_brand_primary }};"
     backrefs: yes
   sudo_user: www-data
 
-- replace:
+- name: Make sure we don't consume all the ram when building the Webclient
+  replace:
     dest: "{{ storyboard_src_root_webclient }}/bin/nodeenv.sh"
     regexp: 'nodeenv'
     replace: "nodeenv -j{{ ansible_processor_count }}"
   sudo_user: www-data
 
-- command: tox -egrunt build
+- name: Build the webclient
+  command: tox -egrunt build
   args:
     chdir: "{{ storyboard_src_root_webclient}}"
   sudo_user: www-data
