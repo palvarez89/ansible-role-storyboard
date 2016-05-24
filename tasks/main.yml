@@ -186,12 +186,21 @@
     state: link
   notify: restart apache
 
+- name: Set up Systemd configuration for StoryBoard workers
+  template:
+    src: storyboard-workers.service.j2
+    dest: /etc/systemd/system/storyboard-workers.service
+    mode: 0644
+  when: ansible_service_mgr is defined and ansible_service_mgr == "systemd"
+  notify:
+  - restart storyboard-workers
+
 - name: Set up Upstart configuration for StoryBoard workers
   template:
     src: storyboard-workers.conf.j2
     dest: /etc/init/storyboard-workers.conf
     mode: 0644
-  when: storyboard_use_upstart
+  when: storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
   notify:
   - restart storyboard-workers
 
@@ -199,14 +208,14 @@
   file:
     path: /etc/init.d/storyboard-workers
     state: absent
-  when: storyboard_use_upstart
+  when: storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
 
 - name: Set up SysVinit configuration for StoryBoard workers
   template:
     src: storyboard-workers.sh.j2
     dest: /etc/init.d/storyboard-workers
     mode: 0755
-  when: not storyboard_use_upstart
+  when: not storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
   notify:
   - restart storyboard-workers
 
@@ -214,7 +223,7 @@
   file:
     path: /etc/init/storyboard-workers.conf
     state: absent
-  when: not storyboard_use_upstart
+  when: not storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
 
 - name: Start storyboard-workers service
   service:
