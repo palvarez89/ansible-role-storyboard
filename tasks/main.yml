@@ -116,7 +116,7 @@
     dest: "{{ storyboard_src_root_webclient }}"
     update: yes
     force: yes
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Set @brand-primary colour
   lineinfile:
@@ -124,26 +124,26 @@
     regexp: "^@brand-primary:"
     line: "@brand-primary: #{{ storyboard_brand_primary }};"
     backrefs: yes
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Make sure we don't consume all the ram when building the Webclient
   replace:
     dest: "{{ storyboard_src_root_webclient }}/bin/nodeenv.sh"
     regexp: 'nodeenv'
     replace: "nodeenv -j{{ ansible_processor_count }}"
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Build the webclient
   command: tox -egrunt build
   args:
     chdir: "{{ storyboard_src_root_webclient}}"
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Create config.json
   shell: echo "{}" > {{ storyboard_src_root_webclient }}/dist/config.json
   args:
     creates: "{{ storyboard_src_root_webclient }}/dist/config.json"
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Copy storyboard-webclient into the configured www_root
   shell: cp -r "{{ storyboard_src_root_webclient }}"/dist/* "{{ storyboard_www_root }}"
@@ -238,7 +238,7 @@
 
 - name: Set up projects
   command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_projects /tmp/projects.yaml
-  sudo_user: www-data
+  become_user: www-data
   when: storyboard_projects is defined
 
 - name: Copy superusers file to /tmp
@@ -249,5 +249,5 @@
 
 - name: Set up superusers
   command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_superusers /tmp/superusers.yaml
-  sudo_user: www-data
+  become_user: www-data
   when: storyboard_superusers is defined

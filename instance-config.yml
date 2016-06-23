@@ -2,6 +2,6 @@
 - hosts: storyboard
   vars_files:
   - vars.yml
-  sudo: yes
+  become: yes
   roles:
   - { role: palvarez89.storyboard }
