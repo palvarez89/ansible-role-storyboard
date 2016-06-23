@@ -1,0 +1,55 @@
+# RabbitMQ official install
+- name: "add the official rabbitmq repository's key"
+  apt_key:
+    url: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+
+- name: add the official rabbitmq repository
+  apt_repository:
+    repo: 'deb http://www.rabbitmq.com/debian/ testing main'
+    state: present
+
+- name: install rabbitmq-server
+  apt:
+    name: rabbitmq-server
+    update_cache: yes
+
+- name: enable rabbitmq-server to survive reboot
+  service:
+    name: rabbitmq-server
+    enabled: yes
+
+- name: generate the configuration of rabbitmq
+  template:
+    src: rabbitmq.config.j2
+    dest: /etc/rabbitmq/rabbitmq.config
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 0644
+    backup: yes
+  notify: restart rabbitmq-server
+
+
+- name: add rabbitmq user and set privileges
+  rabbitmq_user:
+    user: "{{ storyboard_rabbitmq_user }}"
+    password: "{{ storyboard_rabbitmq_user_password }}"
+    vhost: /
+    configure_priv: '.*'
+    read_priv: '.*'
+    write_priv: '.*'
+    state: present
+    force: no
+
+- name: remove guest user (hostname)
+  rabbitmq_user:
+    user: guest
+    node: "rabbit@{{ ansible_hostname }}"
+    state: absent
+  register: rm_guest_hostname
+  ignore_errors: true
+
+- name: remove guest user (default)
+  rabbitmq_user:
+    user: guest
+    state: absent
+  when: rm_guest_hostname|failed

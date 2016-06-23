@@ -1,4 +1,9 @@
 ---
+- include: mysql.yml
+  when: storyboard_install_mysql
+
+- include: rabbitmq.yml
+  when: storyboard_install_rabbitmq
 # tasks file for ansible-role-storyboard
 
 - name: Copy db_dump file to /tmp
@@ -44,7 +49,8 @@
     src: storyboard.conf.j2
     dest: /etc/storyboard/storyboard.conf
 
-- git:
+- name: Clone API sources
+  git:
     repo: "{{ storyboard_api_repo }}"
     version: "{{ storyboard_api_version }}"
     dest: "{{ storyboard_src_root_api }}"
@@ -78,7 +84,7 @@
   command: install -g www-data -o www-data {{ storyboard_src_root_api }}/storyboard/api/app.wsgi {{ storyboard_install_root }}/storyboard.wsgi
   notify: restart apache
 
-- name: DEPS NEEDED?
+- name: Install some deps needed (TODO; investigate if they are really needed)
   pip:
     name: "{{ item }}"
   with_items:
@@ -103,31 +109,41 @@
   with_items:
   - "{{ storyboard_src_root_webclient }}"
 
-- git:
+- name: Clone Webclient sources
+  git:
     repo: "{{ storyboard_webclient_repo }}"
     version: "{{ storyboard_webclient_version }}"
     dest: "{{ storyboard_src_root_webclient }}"
     update: yes
     force: yes
-  sudo_user: www-data
+  become_user: www-data
 
-- lineinfile:
+- name: Set @brand-primary colour
+  lineinfile:
     dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.less"
     regexp: "^@brand-primary:"
     line: "@brand-primary: #{{ storyboard_brand_primary }};"
     backrefs: yes
-  sudo_user: www-data
+  become_user: www-data
 
-- command: tox -egrunt build
+- name: Make sure we don't consume all the ram when building the Webclient
+  replace:
+    dest: "{{ storyboard_src_root_webclient }}/bin/nodeenv.sh"
+    regexp: 'nodeenv'
+    replace: "nodeenv -j{{ ansible_processor_count }}"
+  become_user: www-data
+
+- name: Build the webclient
+  command: tox -egrunt build
   args:
     chdir: "{{ storyboard_src_root_webclient}}"
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Create config.json
   shell: echo "{}" > {{ storyboard_src_root_webclient }}/dist/config.json
   args:
     creates: "{{ storyboard_src_root_webclient }}/dist/config.json"
-  sudo_user: www-data
+  become_user: www-data
 
 - name: Copy storyboard-webclient into the configured www_root
   shell: cp -r "{{ storyboard_src_root_webclient }}"/dist/* "{{ storyboard_www_root }}"
@@ -170,12 +186,21 @@
     state: link
   notify: restart apache
 
+- name: Set up Systemd configuration for StoryBoard workers
+  template:
+    src: storyboard-workers.service.j2
+    dest: /etc/systemd/system/storyboard-workers.service
+    mode: 0644
+  when: ansible_service_mgr is defined and ansible_service_mgr == "systemd"
+  notify:
+  - restart storyboard-workers
+
 - name: Set up Upstart configuration for StoryBoard workers
   template:
     src: storyboard-workers.conf.j2
     dest: /etc/init/storyboard-workers.conf
     mode: 0644
-  when: storyboard_use_upstart
+  when: storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
   notify:
   - restart storyboard-workers
 
@@ -183,14 +208,14 @@
   file:
     path: /etc/init.d/storyboard-workers
     state: absent
-  when: storyboard_use_upstart
+  when: storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
 
 - name: Set up SysVinit configuration for StoryBoard workers
   template:
     src: storyboard-workers.sh.j2
     dest: /etc/init.d/storyboard-workers
     mode: 0755
-  when: not storyboard_use_upstart
+  when: not storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
   notify:
   - restart storyboard-workers
 
@@ -198,7 +223,7 @@
   file:
     path: /etc/init/storyboard-workers.conf
     state: absent
-  when: not storyboard_use_upstart
+  when: not storyboard_use_upstart and (ansible_service_mgr is undefined or ansible_service_mgr != "systemd")
 
 - name: Start storyboard-workers service
   service:
@@ -213,7 +238,7 @@
 
 - name: Set up projects
   command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_projects /tmp/projects.yaml
-  sudo_user: www-data
+  become_user: www-data
   when: storyboard_projects is defined
 
 - name: Copy superusers file to /tmp
@@ -224,5 +249,5 @@
 
 - name: Set up superusers
   command: storyboard-db-manage --config-file /etc/storyboard/storyboard.conf load_superusers /tmp/superusers.yaml
-  sudo_user: www-data
+  become_user: www-data
   when: storyboard_superusers is defined

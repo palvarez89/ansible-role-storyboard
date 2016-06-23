@@ -15,14 +15,12 @@ before_install:
 
 install:
   # Install Ansible.
-  - pip install ansible==1.9.4
+  - pip install ansible==2.0.2
 
   # Add ansible.cfg to pick up roles path.
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
   - ansible-galaxy install geerlingguy.apache,1.4.2 -p `pwd`/..
-  - ansible-galaxy install Mayeu.RabbitMQ,1.4.0 -p `pwd`/..
-  - ansible-galaxy install geerlingguy.mysql,1.5.0 -p `pwd`/..
 
 before_script:
   - mysql -u root -e 'create database storyboard;'

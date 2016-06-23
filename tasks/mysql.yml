@@ -1,0 +1,72 @@
+- name: Update apt cache if MySQL is not yet installed.
+  apt: update_cache=yes
+
+- name: Ensure MySQL packages are installed.
+  apt: "name={{ item }} state=installed"
+  with_items:
+  - mysql-server-5.6
+  - python-mysqldb
+
+- name: Ensure MySQL is started and enabled on boot.
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+# Security related tasks
+
+- name: Get list of hosts for the root user.
+  command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = "root" ORDER BY (Host="localhost") ASC'
+  register: mysql_root_hosts
+  changed_when: false
+
+# 'localhost' needs to be last for idempotency.
+- name: Update MySQL root password for localhost root account.
+  mysql_user:
+    name: "root"
+    host: "{{ item }}"
+    password: "{{ storyboard_mysql_root_password }}"
+  with_items: mysql_root_hosts.stdout_lines
+
+# Has to be after the root password assignment, for idempotency.
+- name: Copy .my.cnf file with root password credentials.
+  template:
+    src: "user-my.cnf.j2"
+    dest: "/root/.my.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Get list of hosts for the anonymous user.
+  command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
+  register: mysql_anonymous_hosts
+  changed_when: false
+
+- name: Remove anonymous MySQL users.
+  mysql_user:
+     name: ""
+     host: "{{ item }}"
+     state: absent
+  with_items: mysql_anonymous_hosts.stdout_lines
+
+- name: Remove MySQL test database.
+  mysql_db: "name='test' state=absent"
+
+# Database
+
+- name: Ensure MySQL databases are present.
+  mysql_db:
+    name: "{{ storyboard_mysql_database }}"
+    state: present
+
+# User
+
+- name: Ensure MySQL user are present.
+  mysql_user:
+    name: "{{ storyboard_mysql_user }}"
+    host: "{{ storyboard_mysql_host | default('localhost') }}"
+    password: "{{ storyboard_mysql_user_password }}"
+    priv: "{{ storyboard_mysql_database }}.*:ALL"
+    state: present
+  with_items: mysql_users
+

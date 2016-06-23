@@ -1,0 +1,16 @@
+[Unit]
+Description=Storyboard Workers service
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+ExecStart=/usr/local/bin/storyboard-worker-daemon --worker-count {{ storyboard_worker_count }}
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

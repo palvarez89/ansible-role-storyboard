@@ -1,5 +1,8 @@
 ---
 - hosts: localhost
   remote_user: root
+  vars:
+    storyboard_install_mysql: false
+    storyboard_install_rabbitmq: false
   roles:
     - ansible-role-storyboard

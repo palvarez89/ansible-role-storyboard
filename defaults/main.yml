@@ -58,3 +58,11 @@ storyboard_brand_primary: '006566'
 # for apache role
 apache_listen_port: 80
 apache_remove_default_vhost: true
+
+# rabbitmq
+storyboard_rabbitmq_listeners_address: 127.0.0.1
+storyboard_install_rabbitmq: true
+
+# mysql
+storyboard_mysql_root_password: not-safe
+storyboard_install_mysql: true

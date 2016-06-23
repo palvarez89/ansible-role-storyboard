@@ -2,8 +2,6 @@
 - hosts: storyboard
   vars_files:
   - vars.yml
-  sudo: yes
+  become: yes
   roles:
-  - { role: Mayeu.RabbitMQ }
-  - { role: geerlingguy.mysql, when: mysql_host == 'localhost' }
   - { role: palvarez89.storyboard }
