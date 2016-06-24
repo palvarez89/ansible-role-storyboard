@@ -4,7 +4,11 @@
 
 - include: rabbitmq.yml
   when: storyboard_install_rabbitmq
+
 # tasks file for ansible-role-storyboard
+- name: Set fqdn
+  hostname:
+    name: "{{ storyboard_fqdn }}"
 
 - name: Copy db_dump file to /tmp
   copy:
