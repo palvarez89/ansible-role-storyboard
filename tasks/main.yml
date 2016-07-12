@@ -44,6 +44,7 @@
   - pip
   - pbr
   - setuptools
+  become: yes
 
 - name: Install apache modules needed
   apache2_module:
