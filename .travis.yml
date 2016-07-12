@@ -32,3 +32,5 @@ script:
 
   # Run the role/playbook with ansible-playbook.
   - "travis_wait ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+after_failure:
+  - cat /opt/storyboard-webclient/.tox/grunt/log/grunt-1.log
