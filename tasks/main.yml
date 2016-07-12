@@ -42,6 +42,7 @@
     extra_args: '--upgrade'
   with_items:
   - pip
+  - pbr
   - setuptools
 
 - name: Install apache modules needed
