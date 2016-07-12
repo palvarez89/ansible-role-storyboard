@@ -146,7 +146,7 @@
   become_user: www-data
 
 - name: Build the webclient
-  command: tox -egrunt build
+  command: tox -egrunt_no_api build
   args:
     chdir: "{{ storyboard_src_root_webclient}}"
   become_user: www-data
