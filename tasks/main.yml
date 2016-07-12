@@ -36,6 +36,14 @@
   - python-dev
   - libmysqlclient-dev
 
+- name: Upgrade pip to latest
+  pip:
+    name: "{{ item }}"
+    extra_args: '--upgrade'
+  with_items:
+  - pip
+  - setuptools
+
 - name: Install apache modules needed
   apache2_module:
     name: "{{ item }}"
