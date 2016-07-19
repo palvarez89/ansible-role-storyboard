@@ -139,6 +139,11 @@
     backrefs: yes
   become_user: www-data
 
+- name: Configure webclient with 'config.json'
+  template:
+    src: config.json.j2
+    dest: "{{ storyboard_src_root_webclient }}/src/config.json"
+
 - name: Make sure we don't consume all the ram when building the Webclient
   replace:
     dest: "{{ storyboard_src_root_webclient }}/bin/nodeenv.sh"

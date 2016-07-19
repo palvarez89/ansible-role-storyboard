@@ -45,6 +45,12 @@ log_dir = /var/log/storyboard
 # and subscriptions.
 enable_notifications = {{ storyboard_enable_notifications }}
 
+{% if storyboard_enable_comment_edition %}
+# Enable editing/deletion of comments. When enabled, users can edit their own
+# comments and admins can delete comments.
+enable_editable_comments = True
+{% endif %}
+
 [oauth]
 # StoryBoard's oauth configuration.
 
