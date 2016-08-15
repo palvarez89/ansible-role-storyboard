@@ -167,17 +167,17 @@
   shell: cp -r "{{ storyboard_src_root_webclient }}"/dist/* "{{ storyboard_www_root }}"
 
 - copy:
-    src: "{{ storyboard_ssl_cert }}"
+    content: "{{ lookup('file', '{{ storyboard_ssl_cert }}') }}"
     dest: "/etc/ssl/certs/{{ storyboard_ssl_cert | basename }}"
   when: storyboard_ssl_cert is defined
 
 - copy:
-    src: "{{ storyboard_ssl_key }}"
+    content: "{{ lookup('file', '{{ storyboard_ssl_key }}') }}"
     dest: "/etc/ssl/private/{{ storyboard_ssl_key | basename }}"
   when: storyboard_ssl_key is defined
 
 - copy:
-    src: "{{ storyboard_resolved_ssl_ca }}"
+    content: "{{ lookup('file', '{{ storyboard_resolved_ssl_ca }}') }}"
     dest: "/etc/ssl/certs/{{ storyboard_resolved_ssl_ca | basename }}"
   when: storyboard_resolved_ssl_ca is defined
 
