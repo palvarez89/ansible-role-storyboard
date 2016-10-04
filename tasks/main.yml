@@ -131,6 +131,16 @@
     force: yes
   become_user: www-data
 
+- name: Check if theme.less exists
+  stat:
+    path: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.less"
+  register: theme_less
+
+- name: Check if theme.scss exists
+  stat:
+    path: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.scss"
+  register: theme_scss
+
 - name: Set @brand-primary colour
   lineinfile:
     dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.less"
@@ -138,6 +148,25 @@
     line: "@brand-primary: #{{ storyboard_brand_primary }};"
     backrefs: yes
   become_user: www-data
+  when: theme_less.stat.isreg is defined and theme_less.stat.isreg == True
+
+- name: Set $brand-primary colour
+  lineinfile:
+    dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/theme.scss"
+    regexp: ^\$brand-primary
+    line: "$brand-primary: #{{ storyboard_brand_primary }};"
+    backrefs: yes
+  become_user: www-data
+  when: theme_scss.stat.isreg is defined and theme_scss.stat.isreg == True
+
+- name: Set $brand-primary colour
+  lineinfile:
+    dest: "{{ storyboard_src_root_webclient }}/src/theme/storyboard/custom_bootstrap_variables.scss"
+    regexp: ^\$brand-primary
+    line: "$brand-primary: #{{ storyboard_brand_primary }};"
+    backrefs: yes
+  become_user: www-data
+  when: theme_scss.stat.isreg is defined and theme_scss.stat.isreg == True
 
 - name: Configure webclient with 'config.json'
   template:
