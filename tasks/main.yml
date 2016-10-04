@@ -157,12 +157,6 @@
     chdir: "{{ storyboard_src_root_webclient}}"
   become_user: www-data
 
-- name: Create config.json
-  shell: echo "{}" > {{ storyboard_src_root_webclient }}/dist/config.json
-  args:
-    creates: "{{ storyboard_src_root_webclient }}/dist/config.json"
-  become_user: www-data
-
 - name: Copy storyboard-webclient into the configured www_root
   shell: cp -r "{{ storyboard_src_root_webclient }}"/dist/* "{{ storyboard_www_root }}"
 
